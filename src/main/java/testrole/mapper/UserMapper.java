@@ -45,4 +45,12 @@ public interface UserMapper {
      * @return 返回插入数据库记录的主键
      */
     int insert2(SysUser sysUser);
+
+    /**
+     * 新增用户---使用selectkey的方式返回新增数据的主键
+     *
+     * @param sysUser 将要插入数据的实体对象
+     * @return 返回该数据在数据库当中的主键
+     */
+    int insert3(SysUser sysUser);
 }

@@ -67,4 +67,18 @@
         )
     </insert>
 
+    <insert id="insert3">
+        insert into sys_user(
+        user_name , user_password ,user_email,user_info ,head_img,create_time
+        )values(
+        #{userName} ,#{userPassword} ,#{userEmail},#{userInfo},
+        #{headImg , jdbcType=BLOB},
+        #{createTime ,jdbcType=TIMESTAMP}
+        )
+        /*设置selectKey来获取插入数据的主键*/
+        <selectKey keyColumn="id" resultType="long" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
 </mapper>

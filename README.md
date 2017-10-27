@@ -199,7 +199,73 @@ int insert2(SysUser sysUser);
  注意：如果要设置多个属性时，使用逗号隔开，这种情况下通常还需要设置keyColumn属性，按顺序指定数据库列，这列的值和keyProperty配置的属性一一对应。
  由于需要使用数据库返回的主键值，在上面的配置文件上下部分都去掉了id列和#{id}属性
 
+>> 4.2 上面使用的返回主键的方式只适用于支持主键自增的数据库。oracle不提供自增主键的功能，而是使用序列得到一个值，然后再将这个值赋值给id，再将数据插入数据库。
+           对于这样的情况就提供了<selectKey>标签来获取主键的值，这种方式不仅仅适用于不提供主键自增的数据库，还适用于提供主键自增功能的数据库。
 
+```xml
+<insert id="insert3">
+    insert into sys_user(
+    user_name , user_password ,user_email,user_info ,head_img,create_time
+)values(
+    #{userName} ,#{userPassword} ,#{userEmail},#{userInfo},
+    #{headImg , jdbcType=BLOB},
+    #{createTime ,jdbcType=TIMESTAMP}
+)
+    /*设置selectKey来获取插入数据的主键*/
+    <selectKey keyColumn="id" resultType="long" keyProperty="id" order="AFTER">
+        select LAST_INSERT_ID()
+    </selectKey>
+</insert>
+```
+  selectKey标签的keyColumn、keyProperty和上面的useGeneratedKeys的用法含义相同，这里的resultType用户设置返回值类型。order属性的设置和使用的数据库有关。
+在MySQL数据库当中，order属性设置为AFTER，因为当前记录的主键值在insert语句执行成功后才能够获取到。
+在Oracle数据库当中，order属性设置为BEFORE，因为Oracle中需要先从序列获取值，然后将值作为主键插入数据库当中。
+>selectKey标签当中属性的介绍，可以看出selectKey当中是一个独立的SQL语句进行获取到当前数据库的主键。    
+     下面介绍一些支持主键自增的数据库配置：
+
+>
+<table>
+    <tr>
+        <td>DB2</td>
+        <td>VALUES IDENTITY_VAL_LOCAL( )</td>
+    <tr>
+    <tr>
+        <td>MySQL</td>
+        <td> SELECT LAST_INSERT_ID( )</td>
+    <tr>
+    <tr>
+        <td> SQL SERVER </td>
+        <td>SELECT SCOPE_IDENTITY( )</td>
+    <tr>
+    <tr>
+        <td>CLOUDSCAPE</td>
+        <td>VALUES IDENTITY_VAL_LOCAL( )</td>
+    <tr>
+    <tr>
+        td>DERBY</td>
+        <td>VALUES IDENTITY_VAL_LOCAL( )</td>
+    <tr>
+    <tr>
+        <td>DB2</td>
+        <td>VALUES IDENTITY_VAL_LOCAL( )</td>
+    <tr>
+    <tr>
+        <td>HSQLDB</td>
+        <td>CALL IDENTITY( )</td>
+    </tr>
+    <tr>
+        <td>SYBASE</td>
+        <td>SELECT @@IDENTITY</td>
+    </tr>
+    <tr>
+        <td>DB2_MF</td>
+        <td>SELECT IDENTITY_VAL_LOCAL( ) FROM SYSIBM.SYSDUMMY1( )</td>
+    </tr>
+    <tr>
+        <td>INFORMIX</td>
+        <td>select dbinfo('sqlca.sqlerrdl') from systables where tabid = 1</td>
+    </tr> 
+</table>
 
 
 

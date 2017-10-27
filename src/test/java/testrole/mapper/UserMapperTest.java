@@ -81,18 +81,18 @@ public class UserMapperTest extends BaseMapperTest {
             user.setCreateTime(new Date());
             //将新建对象插入数据库当中,返回result是受影响行数
            // int result = userMapper.insert(user);
-            int result = userMapper.insert2(user);  // 这里的insert2方法是指定返回主键的方法
+            int result = userMapper.insert(user);  // 这里的insert2方法是指定返回主键的方法
             Assert.assertEquals(1,result);  // 直插入一行数据
             Assert.assertNotNull(user.getId()); // id 为null 没有给id赋值 并没有配置会写id的值
 
         } finally {
             //为了不影响其他测试 这里选择回滚
             // 因为默认的SQLSession.openSession 是不自动提交的 因此不手动执行commit也是不会提交到数据库当中的,只是存在于session缓存当中
-            sqlSession.commit();
+            sqlSession.rollback();
             sqlSession.close();
          //   System.out.println(user);
         }
-       // System.out.println(user);
+        System.out.println(user);
     }
 
 
