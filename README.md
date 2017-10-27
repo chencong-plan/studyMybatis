@@ -29,7 +29,7 @@ public interface UserMapper {
 
 #### 2、ResultMap和ResultType 
 > 使用resultType和resultMap作为方法的返回值类型的不同。如果使用resultMap设置结果的映射，就需要在上面进行配置resultMap的内容。如下面所示：
-```xml
+```
 <mapper>
 <resultMap id="userMap" type="testrole.model.entity.SysUser">
     <id property="id" column="id"/>
@@ -267,6 +267,57 @@ int insert2(SysUser sysUser);
     </tr> 
 </table>
 
+#### 5、多个接口参数的用法
+> 对于之前我们用到接口当中的方法时候，都是只有一个参数，当有多个参数的时候也是对应使用JavaBean进行的（insert update方法）。
+> 但是在实际开发当中这样肯定是不行的，实际开发当中在一个接口当中肯定会有多个参数的，我们也不能为两三个参数去创建一个JavaBean方法（比较麻烦）。
+> 那么现在，就来说一下怎么解决这个问题。在Mybatis当中提供了两种方法解决：① 使用Map类型作为参数 ② 使用@Param注解
+
+① 使用Map方法
+> 使用Map方式作为参数的方法，实际上就是通过Map当中的Key来映射XML当中SQL使用的参数的名字，value来存放参数值。需要多个参数的时候，通过map的key-value进行传递参数。
+> 由于这种方式需要自己手动创建map以及对参数进行赋值，相对来说还是比较麻烦的。着重还是使用@param方法
+```
+    @Test
+    public void testSelectRolesByUserIdAndRoleEnabled() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            // 调用方法selectRolesByUserIdAndRoleEnabled 查询用户的角色
+            List<SysRole> userList = userMapper.selectRolesByUserIdAndRoleEnabled(1L, 1);
+            Assert.assertNotNull(userList);  // 查询结果不为空
+            Assert.assertTrue(userList.size() > 0);
+        } finally {
+            sqlSession.close();
+        }
+    }
+```
+> 如上面代码所示，调用方法selectRolesByUserIdAndRoleEnabled() 然后传递参数，相应的配置文件如下：
+```xml
+<select id="selectRolesByUserIdAndRoleEnabled" resultType="testrole.model.entity.SysRole">
+        select
+          r.id,
+          r.role_name roleName,
+          r.enabled ,
+          r.create_by createBy,
+          r.create_time createTime
+        from sys_user u
+          inner join sys_user_role ur on u.id = ur.user_id
+          inner join sys_role r on ur.role_id = r.id
+        where u.id = #{userId} and r.enabled = #{enabled}
+    </select>
+```
+但是执行的过程后，发现出现这样的错误信息：
+```markdown
+    org.apache.ibatis.exceptions.PersistenceException: 
+    ### Error querying database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'userId' not found. Available parameters are [0, 1, param1, param2]
+    ### Cause: org.apache.ibatis.binding.BindingException: Parameter 'userId' not found. Available parameters are [0, 1, param1, param2]
+```
+这个错误信息表示xml可用的参数只用0,1,param1 ,param2,没有userId.0和1 ， param1 和param2 都是Mybatis根据参数位置自定义的名字，这是如果将xml当中的#{userId}改为#{0}或者 #{param1}也是可以的。
+虽然说这样做可以，为了方便理解。但是实际开发当中不建议这样操作。
+> 
+```java
+  where u.id = #{0} and r.enabled = #{1}
+```
+② 使用@Param注解方式
 
 
 
