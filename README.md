@@ -228,27 +228,27 @@ int insert2(SysUser sysUser);
     <tr>
         <td>DB2</td>
         <td>VALUES IDENTITY_VAL_LOCAL( )</td>
-    <tr>
+    </tr>
     <tr>
         <td>MySQL</td>
         <td> SELECT LAST_INSERT_ID( )</td>
-    <tr>
+    </tr>
     <tr>
         <td> SQL SERVER </td>
         <td>SELECT SCOPE_IDENTITY( )</td>
-    <tr>
+    </tr>
     <tr>
         <td>CLOUDSCAPE</td>
         <td>VALUES IDENTITY_VAL_LOCAL( )</td>
+    </tr>
     <tr>
-    <tr>
-        td>DERBY</td>
+        <td>DERBY</td>
         <td>VALUES IDENTITY_VAL_LOCAL( )</td>
-    <tr>
+    </tr>
     <tr>
         <td>DB2</td>
         <td>VALUES IDENTITY_VAL_LOCAL( )</td>
-    <tr>
+    </tr>
     <tr>
         <td>HSQLDB</td>
         <td>CALL IDENTITY( )</td>
