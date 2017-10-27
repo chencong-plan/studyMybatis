@@ -146,10 +146,15 @@ public class UserMapperTest extends BaseMapperTest {
         try {
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
             // 调用方法selectRolesByUserIdAndRoleEnabled 查询用户的角色
-            List<SysRole> userList = userMapper.selectRolesByUserIdAndRoleEnabled(1L, 1);
-            Assert.assertNotNull(userList);  // 查询结果不为空
-            Assert.assertTrue(userList.size() > 0);
-            for (SysRole sysRole : userList) {
+            //List<SysRole> userList = userMapper.selectRolesByUserIdAndRoleEnabled(1L, 1);
+            SysUser user = new SysUser();
+            user.setId(1l);
+            SysRole role = new SysRole();
+            role.setEnabled(1);
+            List<SysRole> roleList = userMapper.selectRolesByUserAndRole(user, role);
+            // Assert.assertNotNull(userList);  // 查询结果不为空
+            //ssert.assertTrue(userList.size() > 0);
+            for (SysRole sysRole : roleList) {
                 System.out.println(sysRole);
             }
         } finally {

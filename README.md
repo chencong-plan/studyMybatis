@@ -331,5 +331,24 @@ int insert2(SysUser sysUser);
     List<SysRole> selectRolesByUserIdAndRoleEnabled(@Param("userId") Long userId,@Param("enabled") Integer enabled);
 ```
 
+> 如果参数@Parma修饰的参数不是普通的，而是一个JavaBean时候，在xml配置文件当中使用的时候就需要使用“ . ”
+```java
+List<SysRole> selectRolesByUserAndRole(@Param("user") SysUser user,@Param("role") SysRole role);
+```
+相应的xml配置文件当中就需要使用对象.属性来调用了
+```xml
+<select id="selectRolesByUserAndRole" resultType="testrole.model.entity.SysRole">
+        select
+          r.id,
+          r.role_name roleName,
+          r.enabled ,
+          r.create_by createBy,
+          r.create_time createTime
+        from sys_user u
+          inner join sys_user_role ur on u.id = ur.user_id
+          inner join sys_role r on ur.role_id = r.id
+        where u.id = #{user.id} and r.enabled = #{role.enabled}
+    </select>
+```
 
 

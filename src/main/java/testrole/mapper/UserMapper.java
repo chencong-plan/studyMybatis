@@ -87,4 +87,11 @@ public interface UserMapper {
      * @return 返回list集合
      */
     List<SysRole> selectRolesByUserIdAndRoleEnabled(@Param("userId") Long userId, @Param("enabled") Integer enabled);
+
+    /**
+     * @param user
+     * @param role
+     * @return
+     */
+    List<SysRole> selectRolesByUserAndRole(@Param("user") SysUser user, @Param("role") SysRole role);
 }
