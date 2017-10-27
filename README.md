@@ -318,6 +318,18 @@ int insert2(SysUser sysUser);
   where u.id = #{0} and r.enabled = #{1}
 ```
 ② 使用@Param注解方式
+> 刚刚上面提到了将UserMapper.xml当中的#{userId}修改为#{0} 即可，现在使用@Param方法，不需要修改xml配置文件，只需要在接口的方法的参数当中添加@Param注解即可
+> 具体代码实现如下所示：
+```java
+ /**
+     * 根据用户id和角色的enabled状态获取用户的角色
+     *
+     * @param userId  将要查找的用户id
+     * @param enabled 该用户的enabled状态
+     * @return 返回list集合
+     */
+    List<SysRole> selectRolesByUserIdAndRoleEnabled(@Param("userId") Long userId,@Param("enabled") Integer enabled);
+```
 
 
 

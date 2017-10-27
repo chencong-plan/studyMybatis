@@ -1,5 +1,6 @@
 package testrole.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import testrole.model.entity.SysRole;
 import testrole.model.entity.SysUser;
 
@@ -85,5 +86,5 @@ public interface UserMapper {
      * @param enabled 该用户的enabled状态
      * @return 返回list集合
      */
-    List<SysRole> selectRolesByUserIdAndRoleEnabled(Long userId, Integer enabled);
+    List<SysRole> selectRolesByUserIdAndRoleEnabled(@Param("userId") Long userId, @Param("enabled") Integer enabled);
 }
