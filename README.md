@@ -352,14 +352,3 @@ List<SysRole> selectRolesByUserAndRole(@Param("user") SysUser user,@Param("role"
 ```
 同样接口的参数可以使用集合 数组的数据类型都是可以的。
 
-今天天气还不错的 
-```java
-/**
-     * @param user
-     * @param role
-     * @return
-     */
-    List<SysRole> selectRolesByUserAndRole(@Param("user") SysUser user, @Param("role") SysRole role);
-```
-
-
