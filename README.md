@@ -1,5 +1,5 @@
 ### Mybatis学习笔记《Mybatis从入门到精通》
-####1、namespace问题
+#### 1、namespace问题
 > 在XxxMapper.xml的配置文件当中<mapper>根标签的namespace属性，当Mapper接口和xml文件进行关联的时候，命名空间namespace的值就需要配置成接口的全限定名称。
 ```java
 package testrole.mapper;
